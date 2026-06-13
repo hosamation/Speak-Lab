@@ -3,6 +3,10 @@
   <br>
   Speak Lab
 </h1>
+
+![GitHub release](https://img.shields.io/github/v/release/hosamation/Speak-Lab) ![License](https://img.shields.io/github/license/hosamation/Speak-Lab) ![Stars](https://img.shields.io/github/stars/hosamation/Speak-Lab)
+
+You can try it live here: https://hosamation.github.io/Speak-Lab/
 Practice English speaking in your browser — JAM, tongue twisters, impromptu speeches, and interview questions. Records straight to **`.m4a`** (Safari/iOS) or **`.mp3`** (everyone else) — no `.webm`, no server, no account.
 
 ## Features
