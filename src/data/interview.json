@@ -1,0 +1,217 @@
+[
+  {
+    "category": "Self-Introduction & Background",
+    "questions": [
+      "Introduce yourself in 60 seconds.",
+      "Walk me through your resume.",
+      "Why did you choose your current career path?",
+      "What are your top three strengths and one real weakness?",
+      "Where do you see yourself in five years?",
+      "Why do you want to work for this company?",
+      "Why are you leaving your current job?",
+      "What motivates you to do your best work?",
+      "Describe yourself in three words and explain why.",
+      "What is the biggest accomplishment you are proud of?"
+    ]
+  },
+  {
+    "category": "Customer Service & Support",
+    "questions": [
+      "How would you handle a customer who says they already followed all the troubleshooting steps you suggested?",
+      "How do you handle an angry or frustrated customer?",
+      "What's the difference between customer experience and customer service?",
+      "A customer is yelling and using bad language. What do you do?",
+      "How do you say 'no' to a customer without losing them?",
+      "How would you de-escalate a call with a customer threatening to cancel?",
+      "Tell me about a time you turned an unhappy customer into a happy one.",
+      "How do you handle a customer who is technically wrong but absolutely convinced they are right?",
+      "What do you do when you can't solve a customer's problem within your authority?",
+      "How would you handle a customer asking for a refund outside of policy?",
+      "How do you balance empathy with following company policy?",
+      "A customer asks for a feature that doesn't exist. How do you respond?",
+      "What does 'excellent customer service' actually look like in practice?",
+      "How do you keep your tone positive when handling back-to-back difficult calls?",
+      "How would you follow up with a customer after solving their issue?"
+    ]
+  },
+  {
+    "category": "Ownership & Problem Solving",
+    "questions": [
+      "If you face a problem you don't know how to solve, how do you handle it? (show ownership)",
+      "Tell me about a time you took ownership of something that wasn't your responsibility.",
+      "Describe a problem you solved when you had very little information.",
+      "Walk me through your process for debugging an issue you've never seen before.",
+      "Tell me about a mistake you made and what you did about it.",
+      "How do you decide when to ask for help versus figuring it out yourself?",
+      "Describe a time you went above and beyond your job description.",
+      "Tell me about a project that failed. What did you learn?",
+      "How do you prioritize when everything feels urgent?",
+      "Describe a time you had to make a decision without your manager's input."
+    ]
+  },
+  {
+    "category": "Teamwork & Communication",
+    "questions": [
+      "Tell me about a conflict you had with a coworker and how you resolved it.",
+      "How do you handle disagreements with your manager?",
+      "Describe a time you had to give difficult feedback to a teammate.",
+      "How do you work with people whose communication style is very different from yours?",
+      "Tell me about a time you had to convince a team to adopt your idea.",
+      "How do you make sure remote teammates feel included?",
+      "Describe a time you helped a colleague who was struggling.",
+      "How do you handle a teammate who isn't pulling their weight?",
+      "Tell me about a time you had to explain a technical topic to a non-technical person.",
+      "What kind of team culture do you do your best work in?"
+    ]
+  },
+  {
+    "category": "Behavioral (STAR) & Leadership",
+    "questions": [
+      "Tell me about a time you led a project from start to finish.",
+      "Describe a time you had to deliver under a tight deadline.",
+      "Tell me about a time you had to learn a new skill quickly.",
+      "Describe a time you disagreed with a decision but had to support it.",
+      "Tell me about a time you received tough feedback. How did you respond?",
+      "Describe a situation where you had to influence someone without authority.",
+      "Tell me about a time you had to deal with ambiguity.",
+      "Describe your proudest professional moment.",
+      "Tell me about a time you failed and what you'd do differently.",
+      "Describe a time you turned a 'no' into a 'yes'."
+    ]
+  },
+  {
+    "category": "Programming (General)",
+    "questions": [
+      "Explain the difference between compiled and interpreted languages.",
+      "What is the difference between a stack and a queue? Give a real-world use case for each.",
+      "How do you approach reading and understanding unfamiliar code in a large codebase?",
+      "What is version control, and why is Git important in professional development?",
+      "Explain time complexity in simple terms. Why does Big O matter?",
+      "What is the difference between a bug, an error, and an exception?",
+      "How do you test your code before submitting a pull request?",
+      "Describe how you would break down a vague feature request into implementable tasks.",
+      "What is technical debt, and how do you manage it on a team?",
+      "Tell me about a challenging bug you fixed. How did you find the root cause?",
+      "What is the difference between functional and object-oriented programming?",
+      "How do you stay current with new languages, frameworks, and tools?",
+      "Explain what an API is to someone who is not technical.",
+      "What practices help you write code that other developers can maintain?",
+      "Describe a time you had to refactor code without breaking production."
+    ]
+  },
+  {
+    "category": "Linux Administrator",
+    "questions": [
+      "How do you check disk usage and find which directories are consuming the most space?",
+      "Explain the purpose of file permissions in Linux and how chmod works.",
+      "A server is running slowly. Walk me through your first troubleshooting steps.",
+      "What is systemd, and how do you check the status of a service?",
+      "How do you securely manage SSH access to multiple servers?",
+      "Describe the difference between a hard link and a symbolic link.",
+      "How would you set up a cron job, and how do you verify it ran successfully?",
+      "What tools do you use to monitor CPU, memory, and network on a Linux host?",
+      "How do you investigate why a Linux server cannot resolve DNS names?",
+      "Explain how you would rotate and archive log files on a busy server.",
+      "What steps do you take after discovering an unauthorized login attempt?",
+      "How do you patch Linux servers with minimal downtime?",
+      "Describe your experience with package managers such as apt, yum, or dnf.",
+      "How do you troubleshoot a service that fails to start after a reboot?",
+      "What is the difference between a process and a thread in Linux?"
+    ]
+  },
+  {
+    "category": "DevOps Engineer",
+    "questions": [
+      "What does CI/CD mean, and why is it valuable for software teams?",
+      "Explain the difference between containers and virtual machines.",
+      "How would you design a deployment pipeline from commit to production?",
+      "Describe your experience with infrastructure as code tools like Terraform or Ansible.",
+      "A production deployment failed at 2 AM. Walk me through your response.",
+      "What is the difference between blue-green deployment and rolling deployment?",
+      "How do you manage secrets and credentials in a cloud environment?",
+      "Explain what observability means and how logging, metrics, and tracing work together.",
+      "How do you balance speed of delivery with system reliability?",
+      "Describe a time you automated a manual process that saved the team significant time.",
+      "What is a container orchestrator, and when would you use Kubernetes?",
+      "How do you handle environment differences between development, staging, and production?",
+      "What strategies do you use to reduce cloud infrastructure costs?",
+      "How would you investigate intermittent 502 errors behind a load balancer?",
+      "Tell me about your experience with Git branching strategies in a DevOps workflow."
+    ]
+  },
+  {
+    "category": "Frontend Developer",
+    "questions": [
+      "Explain the difference between HTML, CSS, and JavaScript in building a web page.",
+      "What is the DOM, and how does JavaScript interact with it?",
+      "How do you make a website responsive across mobile, tablet, and desktop?",
+      "What is the difference between state and props in a modern frontend framework?",
+      "How do you improve the performance of a slow-loading web application?",
+      "Describe your approach to building accessible forms and navigation.",
+      "What is CORS, and when have you encountered it during development?",
+      "How do you handle API errors gracefully in the user interface?",
+      "Explain the difference between client-side rendering and server-side rendering.",
+      "How do you ensure your UI looks consistent across different browsers?",
+      "Describe a time you translated a design mockup into a polished frontend implementation.",
+      "What tools do you use for debugging layout and styling issues?",
+      "How do you manage application state in a complex single-page app?",
+      "What is your process for reviewing and testing your own frontend code?",
+      "Tell me about a UX improvement you shipped that users clearly noticed."
+    ]
+  },
+  {
+    "category": "Backend Developer",
+    "questions": [
+      "What is the difference between SQL and NoSQL databases? When would you choose each?",
+      "Explain RESTful API design principles you follow in practice.",
+      "How do you design a database schema for a new feature?",
+      "Describe how you would handle authentication and authorization in a web API.",
+      "What is the difference between synchronous and asynchronous processing?",
+      "How do you prevent SQL injection and other common backend security issues?",
+      "Tell me about a time you optimized a slow database query or API endpoint.",
+      "What is caching, and where would you add it in a typical backend system?",
+      "How do you structure error handling so clients receive useful responses?",
+      "Explain how you would build a reliable background job or queue system.",
+      "What is idempotency, and why does it matter for APIs?",
+      "Describe your approach to writing unit and integration tests for backend services.",
+      "How do you version an API without breaking existing clients?",
+      "Walk me through how a request travels from the browser to your backend and back.",
+      "Tell me about a backend system you built that had to handle growing traffic."
+    ]
+  },
+  {
+    "category": "Data Analyst",
+    "questions": [
+      "Walk me through a data analysis project from raw data to actionable insight.",
+      "What is the difference between descriptive, diagnostic, predictive, and prescriptive analytics?",
+      "How do you assess whether a dataset is clean enough to analyze?",
+      "Explain a SQL query you wrote to answer an important business question.",
+      "What is the difference between correlation and causation? Give an example.",
+      "Which data visualization would you choose to compare trends over time, and why?",
+      "How do you handle missing or inconsistent data in a report?",
+      "Describe a dashboard you built and the decisions it helped stakeholders make.",
+      "What metrics would you track for an e-commerce or subscription product?",
+      "How do you validate that your analysis conclusions are accurate?",
+      "Explain the difference between a measure and a dimension in analytics.",
+      "Tell me about a time your analysis changed a team's decision.",
+      "What tools do you use for SQL, spreadsheets, and visualization, and why?",
+      "How do you explain complex data findings to non-technical managers?",
+      "What ethical issues should a data analyst consider when working with user data?"
+    ]
+  },
+  {
+    "category": "Closing & Curveballs",
+    "questions": [
+      "Do you have any questions for us?",
+      "Why should we hire you over other candidates?",
+      "What are your salary expectations?",
+      "If we called your last manager, what would they say about you?",
+      "What would you do in your first 30, 60, 90 days here?",
+      "What's something on your resume you're most excited to talk about?",
+      "If you could change one thing about your last job, what would it be?",
+      "How do you keep learning and growing professionally?",
+      "Describe your ideal work environment.",
+      "If you were not in this profession, what would you be doing?"
+    ]
+  }
+]

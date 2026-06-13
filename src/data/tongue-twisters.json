@@ -1,0 +1,104 @@
+{
+  "easy": [
+    {
+      "text": "Red lorry, yellow lorry.",
+      "focus": "R / L"
+    },
+    {
+      "text": "She sells seashells by the seashore.",
+      "focus": "S / SH"
+    },
+    {
+      "text": "Big black bug bit a big black bear.",
+      "focus": "B"
+    },
+    {
+      "text": "Fresh fried fish, fish fresh fried.",
+      "focus": "F / FR"
+    },
+    {
+      "text": "A proper copper coffee pot.",
+      "focus": "P / K"
+    },
+    {
+      "text": "Nine nice night nurses nursing nicely.",
+      "focus": "N"
+    },
+    {
+      "text": "Truly rural, truly rural.",
+      "focus": "R / L"
+    },
+    {
+      "text": "Unique New York, unique New York.",
+      "focus": "Vowels / Y"
+    }
+  ],
+  "medium": [
+    {
+      "text": "Three thin thinkers thinking thick thoughtful thoughts.",
+      "focus": "TH"
+    },
+    {
+      "text": "I wish to wish the wish you wish to wish.",
+      "focus": "W / SH"
+    },
+    {
+      "text": "The thirty-three thieves thought that they thrilled the throne throughout Thursday.",
+      "focus": "TH / TR"
+    },
+    {
+      "text": "Round the rugged rock the ragged rascal ran.",
+      "focus": "R"
+    },
+    {
+      "text": "Six sleek swans swam swiftly southwards.",
+      "focus": "S / SW"
+    },
+    {
+      "text": "Betty bought a bit of butter, but the butter Betty bought was bitter.",
+      "focus": "B / T"
+    },
+    {
+      "text": "Which witch wished which wicked wish?",
+      "focus": "W / WH / CH"
+    },
+    {
+      "text": "Vincent vowed vengeance very vehemently.",
+      "focus": "V"
+    }
+  ],
+  "hard": [
+    {
+      "text": "The sixth sick sheikh's sixth sheep's sick.",
+      "focus": "S / TH / SH"
+    },
+    {
+      "text": "Pad kid poured curd pulled cold.",
+      "focus": "P / K / L / D"
+    },
+    {
+      "text": "Brisk brave brigadiers brandished broad bright blades, blunderbusses, and bludgeons.",
+      "focus": "BR / BL"
+    },
+    {
+      "text": "Imagine an imaginary menagerie manager managing an imaginary menagerie.",
+      "focus": "M / N / G"
+    },
+    {
+      "text": "She stood on the balcony inexplicably mimicking him hiccuping, and amicably welcoming him in.",
+      "focus": "M / K / Mixed"
+    },
+    {
+      "text": "The seething sea ceaseth and thus the seething sea sufficeth us.",
+      "focus": "S / TH"
+    },
+    {
+      "text": "Rory the warrior and Roger the worrier were reared wrongly in a rural brewery.",
+      "focus": "R / W"
+    },
+    {
+      "text": "Lesser leather never weathered wetter weather better.",
+      "focus": "L / W / TH"
+    }
+  ]
+}
