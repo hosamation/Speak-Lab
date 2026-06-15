@@ -2,12 +2,13 @@
 import { pickRandom, toast } from './util.js';
 import { wireVaultButtons, refreshVaultBar } from './vault.js';
 import { makeRecorder } from './recorder.js';
+import { renderStreak } from './streak.js';
 
 const PATHS = {
   jam: '07-Attachments/Audio/Recordings/JAM-Recordings',
-  tt:  '07-Attachments/Audio/Recordings/Tongue-Twisters-Recordings',
+  tt: '07-Attachments/Audio/Recordings/Tongue-Twisters-Recordings',
   imp: '07-Attachments/Audio/Recordings/Impromptu-Recordings',
-  iv:  '07-Attachments/Audio/Recordings/Interview-Recordings',
+  iv: '07-Attachments/Audio/Recordings/Interview-Recordings',
 };
 
 const PREFIX = {
@@ -24,9 +25,9 @@ const MODULE_LABEL = {
   iv: 'Interview',
 };
 
-async function loadJSON(path){
+async function loadJSON(path) {
   const r = await fetch(path);
-  if(!r.ok) throw new Error('Failed to load ' + path);
+  if (!r.ok) throw new Error('Failed to load ' + path);
   return r.json();
 }
 
@@ -42,7 +43,7 @@ document.querySelectorAll('.tabs button').forEach(b => {
   b.onclick = () => {
     document.querySelectorAll('.tabs button').forEach(x => x.classList.remove('active'));
     b.classList.add('active');
-    ['jam','tt','imp','iv','free'].forEach(t =>
+    ['jam', 'tt', 'imp', 'iv', 'free'].forEach(t =>
       document.getElementById('tab-' + t).classList.toggle('hidden', t !== b.dataset.tab)
     );
   };
@@ -104,7 +105,7 @@ const freeCfg = {
   getLabel: () => freePrompt,
   onBeforeStart: () => {
     freePrompt = freeTextEl.value.trim();
-    if(!freePrompt){
+    if (!freePrompt) {
       toast('Enter a prompt first.');
       return false;
     }
@@ -124,7 +125,7 @@ const syncFreeCfg = () => {
 
 const renderFree = () => {
   freePrompt = freeTextEl.value.trim();
-  if(!freePrompt){
+  if (!freePrompt) {
     freeQuoteWrap.classList.add('hidden');
     freeQ.textContent = '';
     return;
@@ -137,10 +138,10 @@ const renderFree = () => {
 
 document.getElementById('freeApply').onclick = renderFree;
 freeModuleEl.onchange = () => {
-  if(freePrompt) renderFree();
+  if (freePrompt) renderFree();
 };
 freeTextEl.addEventListener('keydown', e => {
-  if((e.ctrlKey || e.metaKey) && e.key === 'Enter') renderFree();
+  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') renderFree();
 });
 
 makeRecorder('rec-free', freeCfg);
@@ -149,13 +150,14 @@ makeRecorder('rec-free', freeCfg);
 document.querySelectorAll('[data-shuffle]').forEach(b => {
   b.onclick = () => {
     const k = b.dataset.shuffle;
-    if(k === 'jam'){ jamQ   = pickRandom(DATA_jam, jamQ);          renderJam(); }
-    if(k === 'tt') { ttItem = pickRandom(DATA_tt[ttLevel], ttItem); renderTT();  }
-    if(k === 'imp'){ impQ   = pickRandom(impPool(), impQ);          renderImp(); }
-    if(k === 'iv') { ivQ    = pickRandom(ivPool(), ivQ);            renderIv();  }
+    if (k === 'jam') { jamQ = pickRandom(DATA_jam, jamQ); renderJam(); }
+    if (k === 'tt') { ttItem = pickRandom(DATA_tt[ttLevel], ttItem); renderTT(); }
+    if (k === 'imp') { impQ = pickRandom(impPool(), impQ); renderImp(); }
+    if (k === 'iv') { ivQ = pickRandom(ivPool(), ivQ); renderIv(); }
   };
 });
 
 renderJam(); renderTT(); renderImp(); renderIv();
 wireVaultButtons();
 refreshVaultBar();
+renderStreak(document.getElementById('streakCard'));
