@@ -10,6 +10,10 @@
   <title>Speak Lab — English Speaking Practice (JAM · Tongue · Impromptu · Interview)</title>
   <meta name="description"
     content="Practice English speaking with JAM, tongue twisters, impromptu prompts, and interview questions. Records to .m4a / .mp3 directly in your browser.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="./src/styles.css">
   <!-- MP3 encoder (so output is .mp3 instead of .webm on non-Safari) -->
   <script src="https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js"></script>
@@ -197,6 +201,9 @@
 
       <div id="rec-free"></div>
     </section>
+
+    <!-- Practice Streak (GitHub-style heatmap, cookie-persisted) -->
+    <section class="card streak-card" id="streakCard"></section>
 
     <!-- Footer -->
     <footer class="footer-container">

@@ -1,6 +1,7 @@
 // Recorder factory: mic capture → .m4a (Safari native) or .mp3 (encoded via lamejs).
 import { pad, stamp, slug, toast, downloadBlob } from './util.js';
 import { fsSupported, getVaultRoot, saveToVault } from './vault.js';
+import { recordSession } from './streak.js';
 
 function audioBufferToMp3(audioBuffer, kbps = 128) {
   if (!window.lamejs) throw new Error('MP3 encoder not loaded (offline?). Connect to the internet once to cache lamejs.');
@@ -172,13 +173,14 @@ export function makeRecorder(containerId, cfg) {
 
   $('save').onclick = async () => {
     if (!blob) return;
-    if (!fsSupported) { downloadBlob(filename(), blob); toast('Downloaded — move into vault manually.'); return; }
+    if (!fsSupported) { downloadBlob(filename(), blob); recordSession(); toast('Downloaded — move into vault manually.'); return; }
     try {
       if (!getVaultRoot()) { toast('Pick your vault folder first.'); document.getElementById('pickVault').click(); return; }
       const p = await saveToVault(cfg.subpath, filename(), blob);
+      recordSession();
       toast('Saved: ' + p, 3000);
     } catch (e) { console.error(e); toast('Save failed — try Download.'); }
   };
-  $('dl').onclick = () => blob && downloadBlob(filename(), blob);
+  $('dl').onclick = () => { if (blob) { downloadBlob(filename(), blob); recordSession(); } };
   $('clear').onclick = () => reset();
 }
