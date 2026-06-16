@@ -161,6 +161,7 @@ export function makeRecorder(containerId, cfg) {
   $('stop').onclick = () => {
     mr && mr.stop();
     clearInterval(timer);
+    recordSession(); // Count practice session on stop (not just on save/download)
     $('dot').classList.remove('live');
     $('wave').classList.remove('live');
     $('start').classList.remove('hidden');

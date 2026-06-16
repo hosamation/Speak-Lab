@@ -1,5 +1,5 @@
 // Main entry: loads data, wires tabs, builds recorders.
-import { pickRandom, toast } from './util.js';
+import { pickRandom, makeShuffler, toast } from './util.js';
 import { wireVaultButtons, refreshVaultBar } from './vault.js';
 import { makeRecorder } from './recorder.js';
 import { renderStreak } from './streak.js';
@@ -49,49 +49,71 @@ document.querySelectorAll('.tabs button').forEach(b => {
   };
 });
 
-// JAM
-let jamQ = pickRandom(DATA_jam);
+// ── JAM (no-repeat shuffler) ──
+const jamShuffler = makeShuffler('jam', DATA_jam);
+let jamQ = jamShuffler.next();
 const renderJam = () => { document.getElementById('jamQ').textContent = jamQ; };
 makeRecorder('rec-jam', { subpath: PATHS.jam, prefix: 'jam', getLabel: () => jamQ });
 
-// Tongue
-let ttLevel = 'easy', ttItem = pickRandom(DATA_tt.easy);
+// ── Tongue Twisters (no-repeat per level) ──
+let ttLevel = 'easy';
+const ttShufflers = {
+  easy: makeShuffler('tt_easy', DATA_tt.easy),
+  medium: makeShuffler('tt_medium', DATA_tt.medium),
+  hard: makeShuffler('tt_hard', DATA_tt.hard),
+};
+let ttItem = ttShufflers[ttLevel].next();
 const renderTT = () => {
   document.getElementById('ttFocus').textContent = 'Focus: ' + ttItem.focus;
   document.getElementById('ttQ').textContent = ttItem.text;
 };
 document.getElementById('ttLevel').onchange = e => {
   ttLevel = e.target.value;
-  ttItem = pickRandom(DATA_tt[ttLevel]);
+  ttItem = ttShufflers[ttLevel].next();
   renderTT();
 };
 makeRecorder('rec-tt', { subpath: PATHS.tt, prefix: 'tt', getLabel: () => ttLevel + '_' + ttItem.focus });
 
-// Impromptu
+// ── Impromptu (no-repeat per category) ──
 const impSel = document.getElementById('impCat');
 DATA_imp.forEach((c, i) => {
   const o = document.createElement('option'); o.value = i; o.textContent = c.category; impSel.appendChild(o);
 });
 let impCatIdx = -1;
 const impPool = () => impCatIdx < 0 ? DATA_imp.flatMap(c => c.questions) : DATA_imp[impCatIdx].questions;
-let impQ = pickRandom(impPool());
+
+// Create shufflers: one for "all" and one per category
+const impShufflers = { all: makeShuffler('imp_all', impPool()) };
+DATA_imp.forEach((c, i) => {
+  impShufflers[i] = makeShuffler(`imp_${i}`, c.questions);
+});
+const currentImpShuffler = () => impCatIdx < 0 ? impShufflers.all : impShufflers[impCatIdx];
+
+let impQ = currentImpShuffler().next();
 const renderImp = () => { document.getElementById('impQ').textContent = impQ; };
-impSel.onchange = e => { impCatIdx = +e.target.value; impQ = pickRandom(impPool()); renderImp(); };
+impSel.onchange = e => { impCatIdx = +e.target.value; impQ = currentImpShuffler().next(); renderImp(); };
 makeRecorder('rec-imp', { subpath: PATHS.imp, prefix: 'impromptu', getLabel: () => impQ });
 
-// Interview
+// ── Interview (no-repeat per category) ──
 const ivSel = document.getElementById('ivCat');
 DATA_iv.forEach((c, i) => {
   const o = document.createElement('option'); o.value = i; o.textContent = c.category; ivSel.appendChild(o);
 });
 let ivCatIdx = -1;
 const ivPool = () => ivCatIdx < 0 ? DATA_iv.flatMap(c => c.questions) : DATA_iv[ivCatIdx].questions;
-let ivQ = pickRandom(ivPool());
+
+const ivShufflers = { all: makeShuffler('iv_all', ivPool()) };
+DATA_iv.forEach((c, i) => {
+  ivShufflers[i] = makeShuffler(`iv_${i}`, c.questions);
+});
+const currentIvShuffler = () => ivCatIdx < 0 ? ivShufflers.all : ivShufflers[ivCatIdx];
+
+let ivQ = currentIvShuffler().next();
 const renderIv = () => { document.getElementById('ivQ').textContent = ivQ; };
-ivSel.onchange = e => { ivCatIdx = +e.target.value; ivQ = pickRandom(ivPool()); renderIv(); };
+ivSel.onchange = e => { ivCatIdx = +e.target.value; ivQ = currentIvShuffler().next(); renderIv(); };
 makeRecorder('rec-iv', { subpath: PATHS.iv, prefix: 'interview', getLabel: () => ivQ });
 
-// Free — custom prompt
+// ── Free — custom prompt ──
 const freeTextEl = document.getElementById('freeText');
 const freeModuleEl = document.getElementById('freeModule');
 const freeQuoteWrap = document.getElementById('freeQuoteWrap');
@@ -146,14 +168,14 @@ freeTextEl.addEventListener('keydown', e => {
 
 makeRecorder('rec-free', freeCfg);
 
-// Shuffle buttons
+// ── Shuffle buttons (use no-repeat shufflers) ──
 document.querySelectorAll('[data-shuffle]').forEach(b => {
   b.onclick = () => {
     const k = b.dataset.shuffle;
-    if (k === 'jam') { jamQ = pickRandom(DATA_jam, jamQ); renderJam(); }
-    if (k === 'tt') { ttItem = pickRandom(DATA_tt[ttLevel], ttItem); renderTT(); }
-    if (k === 'imp') { impQ = pickRandom(impPool(), impQ); renderImp(); }
-    if (k === 'iv') { ivQ = pickRandom(ivPool(), ivQ); renderIv(); }
+    if (k === 'jam') { jamQ = jamShuffler.next(); renderJam(); }
+    if (k === 'tt') { ttItem = ttShufflers[ttLevel].next(); renderTT(); }
+    if (k === 'imp') { impQ = currentImpShuffler().next(); renderImp(); }
+    if (k === 'iv') { ivQ = currentIvShuffler().next(); renderIv(); }
   };
 });
 

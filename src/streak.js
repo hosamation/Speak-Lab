@@ -1,8 +1,8 @@
-// Practice streak: GitHub-style heatmap persisted in a cookie.
+// Practice streak: GitHub-style heatmap persisted in localStorage.
 // Speak Lab palette: deep primary → primary → indigo → accent purple.
 
-const COOKIE_NAME = 'sl_streak';
-const COOKIE_MAX_AGE = 60 * 60 * 24 * 365 * 2; // 2 years
+const STORAGE_KEY = 'sl_streak';
+const COOKIE_NAME = 'sl_streak'; // legacy – used only for one-time migration
 const WEEKS = 53;
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -15,22 +15,41 @@ function dayKey(d) {
   return `${y}-${m}-${day}`;
 }
 
-function readCookie() {
+/* ── One-time migration: cookie → localStorage ── */
+function migrateCookieIfNeeded() {
   const m = document.cookie.split('; ').find(r => r.startsWith(COOKIE_NAME + '='));
-  if (!m) return { v: 1, days: {} };
+  if (!m) return;
   try {
     const data = JSON.parse(decodeURIComponent(m.slice(COOKIE_NAME.length + 1)));
+    if (data && typeof data === 'object' && data.days) {
+      // Merge into any existing localStorage data (in case both exist)
+      const existing = readStorage();
+      for (const [k, v] of Object.entries(data.days)) {
+        existing.days[k] = Math.max(existing.days[k] || 0, v);
+      }
+      writeStorage(existing);
+    }
+  } catch { /* ignore corrupt cookie */ }
+  // Delete the old cookie
+  document.cookie = `${COOKIE_NAME}=; Max-Age=0; SameSite=Lax; path=/`;
+}
+
+/* ── localStorage read / write ── */
+function readStorage() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return { v: 1, days: {} };
+  try {
+    const data = JSON.parse(raw);
     if (!data || typeof data !== 'object' || !data.days) return { v: 1, days: {} };
     return data;
   } catch { return { v: 1, days: {} }; }
 }
 
 let writeTimer = null;
-function writeCookie(data) {
+function writeStorage(data) {
   clearTimeout(writeTimer);
   writeTimer = setTimeout(() => {
-    const v = encodeURIComponent(JSON.stringify(data));
-    document.cookie = `${COOKIE_NAME}=${v}; Max-Age=${COOKIE_MAX_AGE}; SameSite=Lax; path=/`;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   }, 50);
 }
 
@@ -68,18 +87,22 @@ function calcStreak(days) {
 let renderTarget = null;
 
 export function recordSession() {
-  const data = readCookie();
+  const data = readStorage();
   const k = dayKey(new Date());
   data.days[k] = (data.days[k] || 0) + 1;
   pruneOld(data);
-  writeCookie(data);
+  writeStorage(data);
   if (renderTarget) renderStreak(renderTarget);
 }
 
 export function renderStreak(container) {
   if (!container) return;
   renderTarget = container;
-  const data = pruneOld(readCookie());
+
+  // Run migration on first render
+  migrateCookieIfNeeded();
+
+  const data = pruneOld(readStorage());
 
   // End on today; start aligned to previous Sunday so columns are clean weeks.
   const today = new Date(); today.setHours(0, 0, 0, 0);
