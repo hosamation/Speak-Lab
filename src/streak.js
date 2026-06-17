@@ -45,12 +45,8 @@ function readStorage() {
   } catch { return { v: 1, days: {} }; }
 }
 
-let writeTimer = null;
 function writeStorage(data) {
-  clearTimeout(writeTimer);
-  writeTimer = setTimeout(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  }, 50);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 
 function pruneOld(data) {
@@ -92,25 +88,24 @@ export function recordSession() {
   data.days[k] = (data.days[k] || 0) + 1;
   pruneOld(data);
   writeStorage(data);
-  if (renderTarget) renderStreak(renderTarget);
+  if (renderTarget) renderStreak(renderTarget, data);
 }
 
-export function renderStreak(container) {
+export function renderStreak(container, dataOverride) {
   if (!container) return;
   renderTarget = container;
 
   // Run migration on first render
   migrateCookieIfNeeded();
 
-  const data = pruneOld(readStorage());
+  const data = pruneOld(dataOverride || readStorage());
 
-  // End on today; start aligned to previous Sunday so columns are clean weeks.
+  // GitHub-style window: 53 week columns ending in the current week (today included).
   const today = new Date(); today.setHours(0, 0, 0, 0);
   const end = new Date(today);
   const start = new Date(today);
-  start.setDate(start.getDate() - (WEEKS * 7 - 1));
-  // Align start to Sunday
-  start.setDate(start.getDate() - start.getDay());
+  start.setDate(start.getDate() - start.getDay()); // Sunday of this week
+  start.setDate(start.getDate() - (WEEKS - 1) * 7); // back 52 more weeks
 
   // Build weeks
   const weeks = [];
@@ -120,7 +115,7 @@ export function renderStreak(container) {
   for (let w = 0; w < WEEKS; w++) {
     const col = [];
     for (let r = 0; r < 7; r++) {
-      const inRange = cursor <= end;
+      const inRange = dayKey(cursor) <= dayKey(end);
       const key = dayKey(cursor);
       const count = inRange ? (data.days[key] || 0) : 0;
       col.push({ key, count, date: new Date(cursor), inRange });
