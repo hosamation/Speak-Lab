@@ -752,6 +752,96 @@ audio {
   }
 }
 
+/* ============================================
+   ENHANCED RECORD BUTTON STYLES
+   ============================================ */
+
+.rec-start-btn {
+  position: relative;
+  overflow: hidden;
+  gap: 10px;
+  transition: all 0.3s ease;
+}
+
+.rec-start-btn .rec-icon {
+  width: 35px;
+  height: 35px;
+  object-fit: contain;
+  flex-shrink: 0;
+  display: inline-block;
+  margin-left: -10px;
+  pointer-events: none;
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.25));
+  transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.rec-start-btn .rec-icon.rec-icon--failed {
+  display: none;
+}
+
+.rec-start-btn .rec-label {
+  display: inline-block;
+}
+
+.rec-start-btn:hover:not(:disabled) {
+  transform: scale(1.05) translateY(-1px);
+  box-shadow: 0 8px 28px rgba(59, 130, 246, 0.45), 0 0 0 1px rgba(99, 102, 241, 0.2);
+  background: linear-gradient(135deg, #4f8efc 0%, #7375f2 100%);
+}
+
+.rec-start-btn:hover:not(:disabled) .rec-icon {
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.55));
+  transform: scale(1.1);
+}
+
+.rec-start-btn:active:not(:disabled) {
+  transform: scale(0.97) translateY(0);
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.35);
+}
+
+.rec.recording {
+  border-color: rgba(239, 68, 68, 0.35);
+  box-shadow: inset 0 1px 6px rgba(0, 0, 0, 0.2), 0 0 30px rgba(239, 68, 68, 0.08);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.rec-stop-btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.rec-stop-btn:hover:not(:disabled) {
+  transform: scale(1.05) translateY(-1px);
+  box-shadow: 0 8px 28px rgba(239, 68, 68, 0.45);
+}
+
+.rec.recording .rec-stop-btn {
+  animation: rec-pulse-recording 1.4s infinite ease-in-out;
+  box-shadow: 0 0 25px var(--danger-glow), 0 4px 15px rgba(239, 68, 68, 0.35);
+}
+
+@keyframes rec-pulse-recording {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.03);
+    opacity: 0.92;
+  }
+}
+
+@media (max-width: 600px) {
+  .rec-start-btn .rec-icon {
+    width: 20px;
+    height: 20px;
+  }
+}
+
 /* Toast */
 .toast {
   position: fixed;

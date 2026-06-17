@@ -63,8 +63,11 @@ export function makeRecorder(containerId, cfg) {
         <div class="wave-bar"></div>
       </div>
       <div class="spacer"></div>
-      <button class="btn primary" id="${containerId}-start">🎙️ Record</button>
-      <button class="btn danger hidden" id="${containerId}-stop">■ Stop</button>
+      <button class="btn primary rec-start-btn" id="${containerId}-start">
+        <img class="rec-icon" src="./src/images/speak-lab-logo-no-bg.png" alt="Speak Lab microphone" width="24" height="24" />
+        <span class="rec-label">Record</span>
+      </button>
+      <button class="btn danger rec-stop-btn hidden" id="${containerId}-stop">■ Stop</button>
     </div>
     <div id="${containerId}-out" class="hidden">
       <audio controls id="${containerId}-audio"></audio>
@@ -76,6 +79,14 @@ export function makeRecorder(containerId, cfg) {
       <div class="path" id="${containerId}-path"></div>
     </div>`;
   const $ = id => document.getElementById(containerId + '-' + id);
+  const recPanel = root.querySelector('.rec');
+  const recIcon = root.querySelector('.rec-icon');
+  if (recIcon) {
+    recIcon.addEventListener('error', () => {
+      recIcon.classList.add('rec-icon--failed');
+      recIcon.removeAttribute('src');
+    });
+  }
   let mr = null, chunks = [], stream = null, t0 = 0, timer = null, blob = null, ext = 'mp3';
 
   const tick = () => {
@@ -136,6 +147,7 @@ export function makeRecorder(containerId, cfg) {
       timer = setInterval(tick, 250);
       $('dot').classList.add('live');
       $('wave').classList.add('live');
+      recPanel.classList.add('recording');
       $('start').classList.add('hidden');
       $('stop').classList.remove('hidden');
       if (containerId === 'rec-jam') {
@@ -164,6 +176,7 @@ export function makeRecorder(containerId, cfg) {
     recordSession(); // Count practice session on stop (not just on save/download)
     $('dot').classList.remove('live');
     $('wave').classList.remove('live');
+    recPanel.classList.remove('recording');
     $('start').classList.remove('hidden');
     $('stop').classList.add('hidden');
     if (containerId === 'rec-jam') {
@@ -174,14 +187,13 @@ export function makeRecorder(containerId, cfg) {
 
   $('save').onclick = async () => {
     if (!blob) return;
-    if (!fsSupported) { downloadBlob(filename(), blob); recordSession(); toast('Downloaded — move into vault manually.'); return; }
+    if (!fsSupported) { downloadBlob(filename(), blob); toast('Downloaded — move into vault manually.'); return; }
     try {
       if (!getVaultRoot()) { toast('Pick your vault folder first.'); document.getElementById('pickVault').click(); return; }
       const p = await saveToVault(cfg.subpath, filename(), blob);
-      recordSession();
       toast('Saved: ' + p, 3000);
     } catch (e) { console.error(e); toast('Save failed — try Download.'); }
   };
-  $('dl').onclick = () => { if (blob) { downloadBlob(filename(), blob); recordSession(); } };
+  $('dl').onclick = () => { if (blob) downloadBlob(filename(), blob); };
   $('clear').onclick = () => reset();
 }
