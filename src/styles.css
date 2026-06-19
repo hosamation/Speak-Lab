@@ -1201,6 +1201,62 @@ audio {
   letter-spacing: 0.5px;
 }
 
+.streak-flames {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.streak-flame--best {
+  background: rgba(139, 92, 246, 0.08);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.streak-modules {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin: 14px 0 18px;
+}
+
+.streak-mod {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 10px 12px;
+  text-align: center;
+}
+
+.streak-mod-label {
+  font-size: 11px;
+  color: var(--sub);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.streak-mod-count {
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 22px;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  line-height: 1.2;
+}
+
+.streak-mod-avg {
+  font-size: 11px;
+  color: var(--sub);
+}
+
+@media (max-width: 560px) {
+  .streak-modules {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+
 .streak-scroll {
   overflow-x: auto;
   padding-bottom: 6px;
