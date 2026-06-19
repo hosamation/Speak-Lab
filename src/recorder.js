@@ -45,6 +45,15 @@ async function convertToMp3(rawBlob) {
   return mp3;
 }
 
+const MIN_SESSION_SEC = 5;
+
+const MODULE_FROM_PREFIX = {
+  jam: 'jam',
+  tt: 'tt',
+  impromptu: 'impromptu',
+  interview: 'interview',
+};
+
 export function makeRecorder(containerId, cfg) {
   const { getLabel, onBeforeStart } = cfg;
   const root = document.getElementById(containerId);
@@ -88,6 +97,19 @@ export function makeRecorder(containerId, cfg) {
     });
   }
   let mr = null, chunks = [], stream = null, t0 = 0, timer = null, blob = null, ext = 'mp3';
+  let lastDurationSec = 0;
+  let counted = false; // ensure each take is counted at most once
+  const moduleKey = MODULE_FROM_PREFIX[cfg.prefix] || 'other';
+  const countIfEligible = (reason) => {
+    if (counted) return;
+    if (lastDurationSec < MIN_SESSION_SEC) {
+      toast(`Session too short to count (need ${MIN_SESSION_SEC}s).`, 2500);
+      return;
+    }
+    recordSession(moduleKey, lastDurationSec);
+    counted = true;
+    if (reason) toast(`Counted toward your streak (${reason}).`, 1800);
+  };
 
   const tick = () => {
     const s = Math.floor((Date.now() - t0) / 1000);
@@ -98,6 +120,8 @@ export function makeRecorder(containerId, cfg) {
     $('out').classList.add('hidden');
     $('audio').src = '';
     blob = null;
+    lastDurationSec = 0;
+    counted = false;
     $('wave').classList.remove('live');
     if (containerId === 'rec-jam') {
       const cd = document.getElementById('jam-countdown');
@@ -171,9 +195,10 @@ export function makeRecorder(containerId, cfg) {
   };
 
   $('stop').onclick = () => {
+    lastDurationSec = Math.floor((Date.now() - t0) / 1000);
     mr && mr.stop();
     clearInterval(timer);
-    recordSession(); // Count practice session on stop (not just on save/download)
+    // Note: do NOT count on Stop — wait for Save or Download (intent to keep).
     $('dot').classList.remove('live');
     $('wave').classList.remove('live');
     recPanel.classList.remove('recording');
@@ -187,13 +212,23 @@ export function makeRecorder(containerId, cfg) {
 
   $('save').onclick = async () => {
     if (!blob) return;
-    if (!fsSupported) { downloadBlob(filename(), blob); toast('Downloaded — move into vault manually.'); return; }
+    if (!fsSupported) {
+      downloadBlob(filename(), blob);
+      toast('Downloaded — move into vault manually.');
+      countIfEligible('saved');
+      return;
+    }
     try {
       if (!getVaultRoot()) { toast('Pick your vault folder first.'); document.getElementById('pickVault').click(); return; }
       const p = await saveToVault(cfg.subpath, filename(), blob);
       toast('Saved: ' + p, 3000);
+      countIfEligible('saved');
     } catch (e) { console.error(e); toast('Save failed — try Download.'); }
   };
-  $('dl').onclick = () => { if (blob) downloadBlob(filename(), blob); };
+  $('dl').onclick = () => {
+    if (!blob) return;
+    downloadBlob(filename(), blob);
+    countIfEligible('downloaded');
+  };
   $('clear').onclick = () => reset();
 }
