@@ -15,8 +15,7 @@
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="./src/styles.css">
-  <!-- MP3 encoder (so output is .mp3 instead of .webm on non-Safari) -->
-  <script src="https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js"></script>
+  <!-- MP3 encoder is bundled via npm (see src/recorder.js) so it works offline. -->
 </head>
 
 <body>
@@ -42,8 +41,7 @@
           rel="noopener" class="partner-link" title="View Hackathon Project Page">
           <img src="https://qabilah.com/assets/qabilah-white.svg" alt="Qabilah Hackathon" class="partner-logo qabilah">
         </a>
-        <a href="https://brainsmingle.com/event-details/70d00cdb-d14b-47c0-a4ee-c54eb0449490" target="_blank"
-          rel="noopener" class="partner-link" title="Visit Qabilah Hackathon Circle">
+        <a href="#" target="_blank" rel="noopener" class="partner-link" title="Visit Qabilah Hackathon Circle">
           <img src="https://static.brainsmingle.com/BrainsMingle/logo-dark.png" alt="Brains Mingle"
             class="partner-logo brains">
         </a>
@@ -66,13 +64,17 @@
       <button data-tab="imp">Impromptu Speech</button>
       <button data-tab="iv">Interview</button>
       <button data-tab="free">Free Talk</button>
+      <button data-tab="fav">★ Favourites <span class="tab-count" id="favCount" hidden>0</span></button>
     </div>
 
     <!-- JAM (Just A Minute) Section -->
     <section class="card" id="tab-jam">
       <div class="card-header-row">
         <h2>JAM — Just A Minute</h2>
-        <button class="btn" data-shuffle="jam">🎲 New Question</button>
+        <div class="row">
+          <button class="btn fav-btn" data-fav="jam" title="Save to favourites" aria-pressed="false">☆</button>
+          <button class="btn" data-shuffle="jam">🎲 New Question</button>
+        </div>
       </div>
       <div class="desc">Speak for 60 seconds. No hesitations, no pauses, and no filler words.</div>
       <div class="quote" id="jamQ"></div>
@@ -101,6 +103,7 @@
             <option value="medium">Medium</option>
             <option value="hard">Hard</option>
           </select>
+          <button class="btn fav-btn" data-fav="tt" title="Save to favourites" aria-pressed="false">☆</button>
           <button class="btn" data-shuffle="tt">🎲 New</button>
         </div>
       </div>
@@ -127,6 +130,7 @@
           <select id="impCat">
             <option value="-1">All categories</option>
           </select>
+          <button class="btn fav-btn" data-fav="imp" title="Save to favourites" aria-pressed="false">☆</button>
           <button class="btn" data-shuffle="imp">🎲 New</button>
         </div>
       </div>
@@ -154,6 +158,7 @@
           <select id="ivCat">
             <option value="-1">All categories</option>
           </select>
+          <button class="btn fav-btn" data-fav="iv" title="Save to favourites" aria-pressed="false">☆</button>
           <button class="btn" data-shuffle="iv">🎲 New</button>
         </div>
       </div>
@@ -194,6 +199,7 @@
           </select>
         </div>
         <button class="btn primary" id="freeApply" type="button">✓ Use prompt</button>
+        <button class="btn fav-btn" data-fav="free" title="Save to favourites" aria-pressed="false">☆</button>
       </div>
       <div class="quote hidden" id="freeQuoteWrap">
         <span class="badge" id="freeBadge"></span>
@@ -201,6 +207,18 @@
       </div>
 
       <div id="rec-free"></div>
+    </section>
+
+    <!-- Favourites Section -->
+    <section class="card hidden" id="tab-fav">
+      <div class="card-header-row">
+        <h2>★ Favourites</h2>
+        <button class="btn ghost hidden" id="favClear" title="Remove all favourites">Clear all</button>
+      </div>
+      <div class="desc">Saved prompts from any module. Click <b>Practice</b> to load it back into its module and record.
+      </div>
+      <div id="favList" class="fav-list"></div>
+      <div id="favEmpty" class="fav-empty">No favourites yet — tap the ☆ on any prompt to save it here.</div>
     </section>
 
     <!-- Practice Streak (GitHub-style heatmap, saved in localStorage) -->

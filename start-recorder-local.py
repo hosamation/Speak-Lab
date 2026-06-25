@@ -1,25 +1,29 @@
 #!/usr/bin/env python3
-"""Local dev server for Speak Lab.
+"""Local dev launcher for Speak Lab.
 
-Serves the static site from the repo root so the microphone works
-(secure context: http://localhost or http://127.0.0.1 — not file://).
+Speak Lab is a Vite-powered app: `src/app.js` uses bare-specifier imports
+(`from 'lamejs'`) and JSON imports, which a plain static file server cannot
+resolve. This script installs dependencies if needed and starts the Vite
+dev server on http://localhost:8080 — mic-safe (secure context) and with
+hot reload.
 """
 
 from __future__ import annotations
 
 import argparse
-import socket
+import os
+import shutil
+import subprocess
 import sys
 import webbrowser
-from functools import partial
-from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-DEFAULT_HOST = "127.0.0.1"
-DEFAULT_PORT = 8000
+DEFAULT_PORT = 8080
 
 REQUIRED_PATHS = (
+    "package.json",
+    "vite.config.js",
     "index.html",
     "src/app.js",
     "src/recorder.js",
@@ -32,23 +36,9 @@ REQUIRED_PATHS = (
 )
 
 
-class ReuseHTTPServer(ThreadingHTTPServer):
-    allow_reuse_address = True
-
-
-class SpeakLabHandler(SimpleHTTPRequestHandler):
-    """Static file handler tuned for local Speak Lab development."""
-
-    def end_headers(self):
-        path = self.path.split("?", 1)[0]
-        if path.endswith((".js", ".css", ".json", ".html")) or path in ("", "/"):
-            self.send_header("Cache-Control", "no-store, must-revalidate")
-        super().end_headers()
-
-    def log_message(self, format, *args):
-        if self.command == "GET" and str(args[1]) == "200":
-            return
-        super().log_message(format, *args)
+def die(msg: str, code: int = 1) -> None:
+    print(msg, file=sys.stderr)
+    sys.exit(code)
 
 
 def validate_project() -> None:
@@ -60,110 +50,72 @@ def validate_project() -> None:
         sys.exit(1)
 
 
-def find_free_port(host: str, start: int, attempts: int = 50) -> int:
-    for port in range(start, start + attempts):
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-            sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-            try:
-                sock.bind((host, port))
-            except OSError:
-                continue
-            return port
-    raise SystemExit(f"No free port found in range {start}-{start + attempts - 1}")
+def pick_package_manager() -> list[str]:
+    """Return the install command. Prefer npm (ships with Node)."""
+    for pm, cmd in (
+        ("npm", ["npm", "install"]),
+        ("pnpm", ["pnpm", "install"]),
+        ("bun", ["bun", "install"]),
+        ("yarn", ["yarn", "install"]),
+    ):
+        if shutil.which(pm):
+            return cmd
+    die("Node.js is required. Install Node 18+ from https://nodejs.org and retry.")
+    return []  # unreachable
 
 
-def local_ip() -> str | None:
-    try:
-        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
-            sock.connect(("8.8.8.8", 80))
-            return sock.getsockname()[0]
-    except OSError:
-        return None
+def ensure_deps() -> None:
+    if (ROOT / "node_modules").is_dir():
+        return
+    install_cmd = pick_package_manager()
+    print(f"Installing dependencies: {' '.join(install_cmd)}")
+    res = subprocess.run(install_cmd, cwd=ROOT)
+    if res.returncode != 0:
+        die("Dependency install failed. Run it manually and re-launch.")
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(
-        description="Run Speak Lab locally (JAM, Tongue, Impromptu, Interview, Free).",
-    )
-    parser.add_argument(
-        "-p", "--port",
-        type=int,
-        default=DEFAULT_PORT,
-        help=f"Port to listen on (default: {DEFAULT_PORT})",
-    )
-    parser.add_argument(
-        "--host",
-        default=DEFAULT_HOST,
-        help=f"Bind address (default: {DEFAULT_HOST}; use 0.0.0.0 for LAN)",
-    )
-    parser.add_argument(
-        "--no-open",
-        action="store_true",
-        help="Do not open a browser tab automatically",
-    )
-    parser.add_argument(
-        "--find-port",
-        action="store_true",
-        help="Pick the next free port if the requested one is busy",
-    )
-    return parser.parse_args()
-
-
-def start_server(host: str, port: int) -> ReuseHTTPServer:
-    handler = partial(SpeakLabHandler, directory=str(ROOT))
-    try:
-        return ReuseHTTPServer((host, port), handler)
-    except OSError as exc:
-        raise SystemExit(f"Cannot bind {host}:{port} — {exc}") from exc
+    p = argparse.ArgumentParser(description="Run Speak Lab locally via Vite.")
+    p.add_argument("-p", "--port", type=int, default=DEFAULT_PORT,
+                   help=f"Port to listen on (default: {DEFAULT_PORT})")
+    p.add_argument("--host", default="localhost",
+                   help="Bind address (default: localhost; pass 0.0.0.0 for LAN)")
+    p.add_argument("--no-open", action="store_true",
+                   help="Do not open a browser tab automatically")
+    return p.parse_args()
 
 
 def main() -> None:
     args = parse_args()
     validate_project()
+    ensure_deps()
 
-    host = args.host
-    port = args.port
+    npx = shutil.which("npx") or shutil.which("npm")
+    if not npx:
+        die("npx/npm not found on PATH.")
 
-    try:
-        httpd = start_server(host, port)
-    except SystemExit:
-        if not args.find_port:
-            print("Tip: rerun with --find-port to use the next available port.", file=sys.stderr)
-            raise
-        port = find_free_port(host, port)
-        httpd = start_server(host, port)
-
-    local_url = f"http://127.0.0.1:{port}/"
+    cmd = [npx, "vite", "--host", args.host, "--port", str(args.port)]
+    url = f"http://localhost:{args.port}/"
 
     print()
-    print("Speak Lab — local server")
+    print("Speak Lab — Vite dev server")
     print(f"  Folder : {ROOT}")
-    print(f"  Open   : {local_url}")
-    if host == "0.0.0.0":
-        ip = local_ip()
-        if ip:
-            print(f"  LAN    : http://{ip}:{port}/")
-            print("           (mic over LAN may need HTTPS on some phones)")
-
-    print()
-    print("  Mic works on http://localhost:8000/ and http://127.0.0.1:8000/ only.")
-    print("  Do not open index.html via file://")
-    print("  MP3 encoding loads lamejs from the CDN — internet needed once.")
-    print("  Edit src/data/*.json then refresh the page to see changes.")
+    print(f"  Open   : {url}")
+    print("  Mic requires a secure context — http://localhost is allowed.")
     print("  Stop: Ctrl+C")
     print()
 
-    if not args.no_open and host in ("127.0.0.1", "localhost"):
+    if not args.no_open and args.host in ("localhost", "127.0.0.1"):
         try:
-            webbrowser.open(local_url)
+            webbrowser.open(url)
         except OSError:
             pass
 
     try:
-        httpd.serve_forever()
+        os.chdir(ROOT)
+        subprocess.run(cmd, check=False)
     except KeyboardInterrupt:
         print("\nStopped.")
-        httpd.shutdown()
 
 
 if __name__ == "__main__":
