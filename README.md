@@ -4,7 +4,7 @@
   Speak Lab
 </h1>
 
-![GitHub release](https://img.shields.io/github/v/release/hosamation/Speak-Lab) ![License](https://img.shields.io/github/license/hosamation/Speak-Lab) ![Stars](https://img.shields.io/github/stars/hosamation/Speak-Lab)
+![License](https://img.shields.io/github/license/hosamation/Speak-Lab) ![Stars](https://img.shields.io/github/stars/hosamation/Speak-Lab)
 
 You can try it live here: https://hosamation.github.io/Speak-Lab/
 Practice English speaking in your browser — JAM, tongue twisters, impromptu speeches, and interview questions. Records straight to **`.m4a`** (Safari/iOS) or **`.mp3`** (everyone else) — no `.webm`, no server, no account.
@@ -15,29 +15,31 @@ Practice English speaking in your browser — JAM, tongue twisters, impromptu sp
 - **In-browser recorder** with built-in MP3 encoder (`lamejs`) so files are universally playable.
 - **Save to folder** via the File System Access API (Chrome/Edge desktop) — recordings drop straight into your Obsidian vault. Other browsers download instead.
 - **Mobile-friendly** dark theme.
-- **Pure static site** — no backend, no build step.
+- **Vite-powered** — bundles `lamejs` and JSON data at build time, then ships a fully static site.
 
 ## Run it
 
 ### Locally
-```bash
-python3 start-recorder-local.py
-# opens http://127.0.0.1:8000/ and validates project files
+Requires **Node.js 18+**. Then either:
 
-# options
-python3 start-recorder-local.py --find-port    # if port 8000 is busy
-python3 start-recorder-local.py -p 8765          # custom port
-python3 start-recorder-local.py --host 0.0.0.0   # LAN access (UI testing)
-python3 start-recorder-local.py --no-open        # don't launch browser
+```bash
+# easy mode — auto-installs deps and starts Vite on http://localhost:8080
+python3 start-recorder-local.py
+
+# or run npm directly
+npm install
+npm run dev
 ```
 
-Any static server also works, e.g. `python3 -m http.server 8000`.
-> The microphone requires a **secure context** (`https://` or `http://localhost`/`127.0.0.1`). Opening `index.html` directly with `file://` will not work — browsers block mic access.
+> The microphone requires a **secure context** (`https://` or `http://localhost`). Opening `index.html` directly with `file://` — or via a plain static server — will not work: the app uses ES module imports that only Vite can resolve.
 
 ### Deploy
-Drop the repo on any static host:
-- **GitHub Pages** — Settings → Pages → Deploy from `main` branch, root.
-- **Cloudflare Pages / Netlify / Vercel** — no build command, output directory `/`.
+Build first, then publish the `dist/` folder:
+```bash
+npm run build      # outputs dist/
+npm run preview    # smoke-test the build locally
+```
+- **GitHub Pages / Cloudflare Pages / Netlify / Vercel** — build command `npm run build`, publish directory `dist`.
 
 ## Project structure
 

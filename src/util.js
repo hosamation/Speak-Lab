@@ -1,17 +1,17 @@
 export const pad = n => String(n).padStart(2, '0');
 export const stamp = () => {
   const d = new Date();
-  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}-${pad(d.getSeconds())}`;
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}-${pad(d.getSeconds())}`;
 };
-export const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);
+export const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40);
 
 /**
  * Legacy pickRandom — still used for one-off randomness where no-repeat isn't needed.
  */
-export function pickRandom(arr, not){
-  if(arr.length < 2) return arr[0];
+export function pickRandom(arr, not) {
+  if (arr.length < 2) return arr[0];
   let v;
-  do { v = arr[Math.floor(Math.random()*arr.length)]; } while(v === not);
+  do { v = arr[Math.floor(Math.random() * arr.length)]; } while (v === not);
   return v;
 }
 
@@ -85,13 +85,13 @@ export function makeShuffler(key, pool) {
 }
 
 const toastEl = document.getElementById('toast');
-export function toast(msg, ms = 2200){
+export function toast(msg, ms = 2200) {
   toastEl.textContent = msg;
   toastEl.classList.add('show');
   clearTimeout(toast._t);
   toast._t = setTimeout(() => toastEl.classList.remove('show'), ms);
 }
-export function downloadBlob(name, blob){
+export function downloadBlob(name, blob) {
   const u = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = u; a.download = name;

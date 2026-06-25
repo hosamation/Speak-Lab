@@ -2,9 +2,10 @@
 import { pad, stamp, slug, toast, downloadBlob } from './util.js';
 import { fsSupported, getVaultRoot, saveToVault } from './vault.js';
 import { recordSession } from './streak.js';
+import * as lamejs from 'lamejs';
 
 function audioBufferToMp3(audioBuffer, kbps = 128) {
-  if (!window.lamejs) throw new Error('MP3 encoder not loaded (offline?). Connect to the internet once to cache lamejs.');
+  if (!lamejs || !lamejs.Mp3Encoder) throw new Error('MP3 encoder failed to load.');
   const channels = Math.min(audioBuffer.numberOfChannels, 2);
   const sampleRate = audioBuffer.sampleRate;
   const encoder = new lamejs.Mp3Encoder(channels, sampleRate, kbps);
@@ -223,7 +224,11 @@ export function makeRecorder(containerId, cfg) {
       const p = await saveToVault(cfg.subpath, filename(), blob);
       toast('Saved: ' + p, 3000);
       countIfEligible('saved');
-    } catch (e) { console.error(e); toast('Save failed — try Download.'); }
+    } catch (e) {
+      console.error(e);
+      const msg = e.message || 'Save failed — try Download.';
+      toast(msg, 4000);
+    }
   };
   $('dl').onclick = () => {
     if (!blob) return;
