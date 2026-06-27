@@ -3,6 +3,7 @@ import { pad, stamp, slug, toast, downloadBlob } from './util.js';
 import { fsSupported, getVaultRoot, saveToVault } from './vault.js';
 import { recordSession } from './streak.js';
 import * as lamejs from 'lamejs';
+import logoUrl from './images/speak-lab-logo-no-bg.png';
 
 function audioBufferToMp3(audioBuffer, kbps = 128) {
   if (!lamejs || !lamejs.Mp3Encoder) throw new Error('MP3 encoder failed to load.');
@@ -74,7 +75,7 @@ export function makeRecorder(containerId, cfg) {
       </div>
       <div class="spacer"></div>
       <button class="btn primary rec-start-btn" id="${containerId}-start">
-        <img class="rec-icon" src="./src/images/speak-lab-logo-no-bg.png" alt="Speak Lab microphone" width="24" height="24" />
+        <img class="rec-icon" src="${logoUrl}" alt="Speak Lab microphone" width="24" height="24" />
         <span class="rec-label">Record</span>
       </button>
       <button class="btn danger rec-stop-btn hidden" id="${containerId}-stop">■ Stop</button>
