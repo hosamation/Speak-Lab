@@ -1,6 +1,5 @@
 /* Fonts loaded via <link> in index.html (lightningcss cannot fetch remote @import). */
 
-
 :root {
   --bg-gradient: radial-gradient(circle at 50% 0%, #0d1527 0%, #050811 100%);
   --glass-bg: rgba(13, 20, 38, 0.55);
@@ -20,8 +19,8 @@
   --danger-glow: rgba(239, 68, 68, 0.35);
   --ok: #10b981;
   --shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
-  --font-title: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-title: "Outfit", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 * {
@@ -117,7 +116,8 @@ body {
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.25));
-  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+  transition:
+    transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
     border-color 0.4s,
     filter 0.4s,
     background 0.4s;
@@ -179,7 +179,9 @@ h1 {
 .partner-logo {
   height: 24px;
   opacity: 0.75;
-  transition: opacity 0.3s, transform 0.3s;
+  transition:
+    opacity 0.3s,
+    transform 0.3s;
   object-fit: contain;
 }
 
@@ -211,7 +213,9 @@ h1 {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   box-shadow: var(--shadow);
-  transition: border-color 0.3s, box-shadow 0.3s;
+  transition:
+    border-color 0.3s,
+    box-shadow 0.3s;
 }
 
 .bar:hover {
@@ -365,7 +369,10 @@ h1 {
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   box-shadow: var(--shadow);
-  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+  transition:
+    transform 0.3s,
+    border-color 0.3s,
+    box-shadow 0.3s;
 }
 
 .card:hover {
@@ -420,7 +427,7 @@ h1 {
 }
 
 .quote::before {
-  content: '“';
+  content: "“";
   position: absolute;
   top: -15px;
   left: 15px;
@@ -772,7 +779,9 @@ audio {
   margin-left: -10px;
   pointer-events: none;
   filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.25));
-  transition: filter 0.3s ease, transform 0.3s ease;
+  transition:
+    filter 0.3s ease,
+    transform 0.3s ease;
 }
 
 .rec-start-btn .rec-icon.rec-icon--failed {
@@ -785,7 +794,9 @@ audio {
 
 .rec-start-btn:hover:not(:disabled) {
   transform: scale(1.05) translateY(-1px);
-  box-shadow: 0 8px 28px rgba(59, 130, 246, 0.45), 0 0 0 1px rgba(99, 102, 241, 0.2);
+  box-shadow:
+    0 8px 28px rgba(59, 130, 246, 0.45),
+    0 0 0 1px rgba(99, 102, 241, 0.2);
   background: linear-gradient(135deg, #4f8efc 0%, #7375f2 100%);
 }
 
@@ -801,8 +812,12 @@ audio {
 
 .rec.recording {
   border-color: rgba(239, 68, 68, 0.35);
-  box-shadow: inset 0 1px 6px rgba(0, 0, 0, 0.2), 0 0 30px rgba(239, 68, 68, 0.08);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow:
+    inset 0 1px 6px rgba(0, 0, 0, 0.2),
+    0 0 30px rgba(239, 68, 68, 0.08);
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .rec-stop-btn {
@@ -818,7 +833,9 @@ audio {
 
 .rec.recording .rec-stop-btn {
   animation: rec-pulse-recording 1.4s infinite ease-in-out;
-  box-shadow: 0 0 25px var(--danger-glow), 0 4px 15px rgba(239, 68, 68, 0.35);
+  box-shadow:
+    0 0 25px var(--danger-glow),
+    0 4px 15px rgba(239, 68, 68, 0.35);
 }
 
 @keyframes rec-pulse-recording {
@@ -1087,7 +1104,9 @@ audio {
   color: var(--sub);
   text-decoration: none;
   font-size: 0.88rem;
-  transition: color 0.3s, transform 0.3s;
+  transition:
+    color 0.3s,
+    transform 0.3s;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -1115,9 +1134,16 @@ audio {
   vertical-align: middle;
 }
 
+.footer-icon-img-wide {
+  width: 36px;
+  height: 21px;
+}
+
 .partner-link {
   display: inline-flex;
-  transition: transform 0.3s, filter 0.3s;
+  transition:
+    transform 0.3s,
+    filter 0.3s;
 }
 
 .partner-link:hover {
@@ -1256,7 +1282,6 @@ audio {
   }
 }
 
-
 .streak-scroll {
   overflow-x: auto;
   padding-bottom: 6px;
@@ -1289,7 +1314,9 @@ audio {
   border-radius: 2px;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.06);
-  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease;
 }
 
 .streak-cell.empty {
@@ -1487,7 +1514,6 @@ audio {
   }
 }
 
-
 /* ── Search Bar ── */
 .search-bar {
   padding: 12px 16px;
@@ -1671,7 +1697,7 @@ audio {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 4px;
   padding: 4px 8px;
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
   font-size: 12px;
   color: rgba(168, 85, 247, 0.9);
   min-width: 80px;
